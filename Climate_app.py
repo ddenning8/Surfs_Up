@@ -62,8 +62,13 @@ def welcome():
 @app.route("/api/v1.0/precipitation")
 def precipitation():
     precp_results = session.query(Measurement.date, func.avg(Measurement.prcp)).filter(Measurement.date >= twelve_months).group_by(Measurement.date).all()
-    dict_results = dict(precp_results)
-    return jsonify(dict_results)
+    prcp_results = []
+    for date,prcp in precp_results:
+        prcp_dict = {}
+        prcp_dict['date']=date
+        prcp_dict['prcp']=prcp
+        prcp_results.append(prcp_dict)
+    return jsonify(prcp_results)
 
 #################################################
 
